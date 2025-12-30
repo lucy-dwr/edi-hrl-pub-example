@@ -1,0 +1,76 @@
+name: Check Required Files and Folders
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-structure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check required folders and files
+        run: |
+          echo "Checking for required folders and files..."
+
+          # Define required folders
+          REQUIRED_FOLDERS=(
+            "data-raw/data_objects"
+            "data-raw/eml"
+            "data-raw/metadata_templates"
+            "data-raw/metadata_templates/attributes_csv_template"
+            "data-raw/metadata_templates/personnel_csv_template"
+          )
+
+          # Define required files
+          REQUIRED_FILES=(
+            "data-raw/metadata_templates/abstract.txt"
+            "data-raw/metadata_templates/intellectual_rights.txt"
+            "data-raw/metadata_templates/keywords.txt"
+            "data-raw/metadata_templates/methods.docx"
+            "data-raw/metadata_templates/taxonomic_coverage.txt"
+          )
+
+          # Initialize error flag
+          ERRORS=0
+
+          # Check folders
+          echo ""
+          echo "=== Checking Folders ==="
+          for folder in "${REQUIRED_FOLDERS[@]}"; do
+            if [ -d "$folder" ]; then
+              echo "✓ Found: $folder"
+            else
+              echo "✗ Missing: $folder"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          # Check files
+          echo ""
+          echo "=== Checking Files ==="
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✓ Found: $file"
+            else
+              echo "✗ Missing: $file"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          # Report results
+          echo ""
+          if [ $ERRORS -eq 0 ]; then
+            echo "✓ All required folders and files are present!"
+            exit 0
+          else
+            echo "✗ $ERRORS required folder(s) or file(s) are missing!"
+            exit 1
+          fi
