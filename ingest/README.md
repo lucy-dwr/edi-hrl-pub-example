@@ -1,6 +1,6 @@
 # ingest
 
-This folder contains scripts that pull data into `data/raw/` through API calls and scripted downloads. Add source-specific notes (e.g., by updating this README.md file) and configs here as needed. Expose a `run_ingest()` function in `ingest/ingest.R` so the CLI runner or {targets} pipeline can call it.
+This folder contains scripts that pull data into `data/raw/` through API calls and scripted downloads. Add source-specific notes (e.g., by updating this README.md file) and configs here as needed. Expose a `run_ingest()` function in `ingest/ingest.R` so the runner or {targets} pipeline can call it.
 
 ## Example
 

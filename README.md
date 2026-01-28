@@ -25,11 +25,11 @@ The workflow can be run in two ways: either by sourcing the pipeline orchestrati
 - **`clean/`:** scripts that clean raw data to produce clean datasets
 - **`qc/`:** quality control scripts and reports to validate cleaned data
 - **`publish/`:** scripts to generate metadata and publish cleaned data and metadata to EDI
-- **`scripts/`:** script that runs ingest → clean → qc → publish
+- **`scripts/`:** scripts that run ingest → clean → qc → publish
 - **`targets/`:** optional `{targets}` documentation/templates (main config is `_targets.R`)
 - **`tests/`:** – automated tests to ensure code quality and correctness as needed
     - **`testthat/`:** unit tests using the `testthat` package
 
 ## Example
 
-This repository contains an example workflow for a dataset of microhabitat observations. A partial workflow for CDEC precipitation data is also included to illustrate how to handle an API call in data ingestion.
+This repository contains an example workflow for a dataset of fish microhabitat observations. A partial workflow for CDEC precipitation data is also included to illustrate how to handle an API call in data ingestion.
