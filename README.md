@@ -33,3 +33,7 @@ The workflow can be run in two ways: either by sourcing the pipeline orchestrati
 ## Example
 
 This repository contains an example workflow for a dataset of fish microhabitat observations. A partial workflow for CDEC precipitation data is also included to illustrate how to handle an API call in data ingestion.
+
+## Needed Dev
+
+TODO: update CI
