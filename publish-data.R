@@ -1,9 +1,8 @@
 # Script used to publish data to EDI
 
-# TODO insert link to documentation
+# TODO insert link to documentation?
 
-# TODO code to install hrlpub
-
+# TODO: fill in strings below
 publish_data_edi(path_eml_file = "INSERT FILE PATH",
                  publish_type = "OPTIONS ARE: new, update",
                  edi_number = "INSERT EDI NUMBER",

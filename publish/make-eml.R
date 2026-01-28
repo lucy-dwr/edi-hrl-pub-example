@@ -13,6 +13,8 @@ coordinates <- "TODO: bounding coordinates"
 maintenance <- "TODO: maintenance description"
 edi_number <- "TODO: EDI package number (if applicable)"
 
+# TODO: Fill out metadata files and objects
+
 # Specify template inputs
 abstract_file <- file.path(template_dir, "abstract.txt")
 methods_file <- file.path(template_dir, "methods.docx")
@@ -22,7 +24,7 @@ taxa_file <- file.path(template_dir, "taxonomic_coverage.txt")
 rights_file <- file.path(template_dir, "intellectual_rights.txt")
 custom_units_file <- file.path(template_dir, "custom_units.txt")
 
-# Toggle to run EML creation.
+# Create EML
 hrlpub::make_eml_edi(
   data_file_names = data_file_names,
   attributes_file_names = attributes_file_names,

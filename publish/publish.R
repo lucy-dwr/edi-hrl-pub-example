@@ -6,5 +6,6 @@ run_publish <- function(clean_outputs = NULL, qc_outputs = NULL, publish = FALSE
     return(invisible(NULL))
   }
 
+  # TODO: Wire this function to publish-data.R once demo credentials and package ID are available.
   stop("Publishing is disabled in this demo. Set publish = FALSE.", call. = FALSE)
 }

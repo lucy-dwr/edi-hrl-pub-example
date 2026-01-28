@@ -1,8 +1,3 @@
-# Establish parameters
-query_group <- "OR1" # CDEC group code for Oroville precip stations
-query_state_date <- "2024-01-01"
-query_end_date <- "2024-12-31"
-
 # Create a function to call the CDEC API with retries to handle transient outages
 fetch_cdec_group_with_retry <- function(groups, start.date, end.date, max_attempts = 5, wait_seconds = 5) {
   for (attempt in seq_len(max_attempts)) {
@@ -37,9 +32,9 @@ fetch_cdec_group_with_retry <- function(groups, start.date, end.date, max_attemp
 }
 
 oroville_precip_2024_raw <- fetch_cdec_group_with_retry(
-  groups = query_group,
-  start.date = query_state_date,
-  end.date = query_end_date
+  groups = "OR1",
+  start.date = "2024-01-01",
+  end.date = "2024-12-31"
 )
 
 # Save the fetched data to an RDS file in `data/raw` for later cleaning

@@ -73,6 +73,50 @@ clean_negative_values <- function(data, cols, diagnostics_dir, issue_log) {
   list(raw = data, issue_log = issue_log, negative_details = negative_details)
 }
 
+# Clean percent columns to the 0-100 range, log issues, and capture diagnostics
+clean_percent_ranges <- function(data, cols, diagnostics_dir, issue_log) {
+  percent_details <- list()
+
+  for (col in cols) {
+    out_of_range <- which(!is.na(data[[col]]) & (data[[col]] < 0 | data[[col]] > 100))
+    n_bad <- length(out_of_range)
+    if (n_bad > 0) {
+      percent_details[[col]] <- tibble::tibble(
+        micro_hab_data_tbl_id = data$micro_hab_data_tbl_id[out_of_range],
+        variable = col,
+        value = data[[col]][out_of_range]
+      )
+    }
+    data[[col]] <- ifelse(!is.na(data[[col]]) & (data[[col]] < 0 | data[[col]] > 100), NA, data[[col]])
+    if (n_bad > 0) {
+      issue_log <- dplyr::bind_rows(
+        issue_log,
+        log_issue(
+          paste0(col, "_out_of_range"),
+          n_bad,
+          "Percent values outside 0-100 set to NA",
+          details_path = file.path(diagnostics_dir, paste0("microhabitat_percent_out_of_range_", col, ".csv"))
+        )
+      )
+    }
+  }
+
+  if (isTRUE(verbose)) {
+    if (length(percent_details) > 0) {
+      percent_summary <- data.frame(
+        variable = names(percent_details),
+        rows = vapply(percent_details, nrow, integer(1)),
+        row.names = NULL
+      )
+      print_table("Percent out-of-range counts by variable:", percent_summary)
+    } else {
+      log_info("Percent out-of-range counts by variable: 0")
+    }
+  }
+
+  list(raw = data, issue_log = issue_log, percent_details = percent_details)
+}
+
 # Data import ------------------------------------------------------------------
 # Establish file paths
 raw_path <- "data/raw/microhabitat_observations_raw.csv"
@@ -156,6 +200,13 @@ negative_results <- clean_negative_values(raw, negative_cols, diagnostics_dir, i
 raw <- negative_results$raw
 issue_log <- negative_results$issue_log
 negative_details <- negative_results$negative_details
+
+# Clean percent columns to the 0-100 range
+percent_cols <- names(raw)[stringr::str_starts(names(raw), "percent_")]
+percent_results <- clean_percent_ranges(raw, percent_cols, diagnostics_dir, issue_log)
+raw <- percent_results$raw
+issue_log <- percent_results$issue_log
+percent_details <- percent_results$percent_details
 
 # Specify a controlled vocabulary for species
 species_vocab <- c(
@@ -312,7 +363,7 @@ issue_log <- dplyr::bind_rows(
   )
 )
 
-raw <- raw |> dplyr::select(-date_original, -date_parsed, -channel_original)
+raw <- raw |> dplyr::select(-date_original, -date_parsed, -date_format_raw, -channel_original)
 
 # Persist outputs
 readr::write_csv(raw, clean_path, na = "")
@@ -329,6 +380,15 @@ if (length(negative_details) > 0) {
     readr::write_csv(
       negative_details[[nm]],
       file.path(diagnostics_dir, paste0("microhabitat_negative_", nm, ".csv"))
+    )
+  }
+}
+
+if (length(percent_details) > 0) {
+  for (nm in names(percent_details)) {
+    readr::write_csv(
+      percent_details[[nm]],
+      file.path(diagnostics_dir, paste0("microhabitat_percent_out_of_range_", nm, ".csv"))
     )
   }
 }
