@@ -1,0 +1,4 @@
+date_format_raw,rows,prevalence
+dd-mm-yyyy,1,1e-4
+mm/dd/yyyy,2,2e-4
+yyyy-mm-dd,9824,0.9997
