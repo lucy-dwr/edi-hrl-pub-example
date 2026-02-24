@@ -21,7 +21,9 @@
 library(hrlpub)
 
 # Set TRUE for more console output
-verbose <- FALSE
+if (!exists("verbose")) {
+  verbose <- FALSE
+}
 
 
 # ==============================================================================
@@ -29,10 +31,18 @@ verbose <- FALSE
 # ==============================================================================
 
 # Establish file paths
-raw_path <- "data/raw/microhabitat_observations_raw.csv"
-clean_path <- "data/clean/microhabitat_observations_clean.csv"
-issues_path <- "data/clean/microhabitat_observations_issue_summary.csv"
-diagnostics_dir <- "data/clean/diagnostics"
+if (!exists("raw_path")) {
+  raw_path <- "data/raw/microhabitat_observations_raw.csv"
+}
+if (!exists("clean_path")) {
+  clean_path <- "data/clean/microhabitat_observations_clean.csv"
+}
+if (!exists("issues_path")) {
+  issues_path <- "data/clean/microhabitat_observations_issue_summary.csv"
+}
+if (!exists("diagnostics_dir")) {
+  diagnostics_dir <- "data/clean/diagnostics"
+}
 dir.create(diagnostics_dir, showWarnings = FALSE, recursive = TRUE)
 
 # Read raw data and keep dates as character to profile formats first
@@ -459,5 +469,14 @@ if (nrow(channel_missing_details) > 0) {
 message("Cleaned data written to: ", clean_path)
 message("Issue summary written to: ", issues_path)
 
-outputs <- c(clean_path, issues_path, list.files(diagnostics_dir, full.names = TRUE))
-invisible(outputs)
+# Establish outputs for the runner (optional for targets-orchestrated pipeline)
+outputs <- c(
+  clean_path,
+  issues_path,
+  list.files(
+    diagnostics_dir,
+    pattern = "^microhabitat_(date|negative|species|channel|issue_log)",
+    full.names = TRUE
+  )
+)
+invisible(unique(outputs[file.exists(outputs)]))
