@@ -1,11 +1,12 @@
 issue,rows_affected,prevalence,action,details_path
-date_parse_failed,2,2e-4,Parsed with ymd/mdy/dmy; invalid entries coerced to NA,data/clean/diagnostics/microhabitat_date_parse_failures.csv
+date_missing_or_not_provided,0,0,Left as NA when missing in raw date field,data/clean/diagnostics/microhabitat_date_missing_or_not_provided.csv
+date_parse_failed,2,2e-4,Parsed with ymd/mdy/dmy; unparsable non-missing entries coerced to NA,data/clean/diagnostics/microhabitat_date_parse_failures.csv
 date_formats_profiled,9827,1,Raw date formats counted; see diagnostics,data/clean/diagnostics/microhabitat_date_format_counts.csv
 count_negative,1,1e-4,Negative values set to NA,data/clean/diagnostics/microhabitat_negative_count.csv
 fl_mm_negative,1,1e-4,Negative values set to NA,data/clean/diagnostics/microhabitat_negative_fl_mm.csv
 depth_negative,1,1e-4,Negative values set to NA,data/clean/diagnostics/microhabitat_negative_depth.csv
 velocity_negative,1,1e-4,Negative values set to NA,data/clean/diagnostics/microhabitat_negative_velocity.csv
-species_standardized,3,3e-4,Standardized to controlled vocabulary,data/clean/diagnostics/microhabitat_species_standardized_details.csv
+species_standardized,9,9e-4,Standardized to controlled vocabulary,data/clean/diagnostics/microhabitat_species_standardized_details.csv
 species_missing_or_not_provided,9207,0.9369,Left as NA when missing or unrecognized (includes observations with no fish observed),data/clean/diagnostics/microhabitat_species_missing_or_unrecognized.csv
 channel_standardized,3,3e-4,Standardized to controlled vocabulary,data/clean/diagnostics/microhabitat_channel_standardized_details.csv
 channel_missing_or_not_provided,799,0.0813,Left as NA when missing or unrecognized,data/clean/diagnostics/microhabitat_channel_missing_or_unrecognized.csv
