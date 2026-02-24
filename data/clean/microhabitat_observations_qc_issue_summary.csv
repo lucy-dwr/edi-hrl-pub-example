@@ -1,0 +1,3 @@
+issue,rows_affected,prevalence,action,details_path
+qc_suspect_records,41,0.0042,Flagged as SUSPECT by hrlpub::run_qc_checks for fish_observation data,data/clean/diagnostics/microhabitat_qc_flags.csv
+qc_reject_records,1,1e-4,Flagged as REJECT by hrlpub::run_qc_checks for fish_observation data,data/clean/diagnostics/microhabitat_qc_flags.csv

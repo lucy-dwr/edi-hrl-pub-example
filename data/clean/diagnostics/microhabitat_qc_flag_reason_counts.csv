@@ -1,0 +1,4 @@
+flag,flag_reason,rows
+SUSPECT,Exact duplicate record,39
+SUSPECT,Exceeds maximum plausible count,2
+REJECT,Missing count,1
