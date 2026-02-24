@@ -1,2 +1,2 @@
-micro_hab_data_tbl_id,variable,value
-8065,fl_mm,-25
+"id","variable","value"
+"S8000","fl_mm",-25

@@ -1,121 +1,13 @@
+# Clean microhabitat data
+# The following are checked and cleaned: dates, negative values, percent ranges,
+# species vocabulary, geomorphic unit vocabulary. Clean data are saved along with
+# an issue log.
+
+library(hrlpub) # contains a few functions for data cleaning
+
 # Run options ------------------------------------------------------------------
 # Set TRUE for more console output
 verbose <- FALSE
-
-# Helper functions -------------------------------------------------------------
-# Print a message only when verbose is TRUE
-log_info <- function(...) {
-  if (isTRUE(verbose)) {
-    message(...)
-  }
-}
-
-# Print a label and a table only when verbose is TRUE
-print_table <- function(label, x) {
-  if (isTRUE(verbose)) {
-    message(label)
-    print(x)
-  }
-}
-
-# Log an issue row with prevalence calculated from total dataframe rows (n_total) in this script
-log_issue <- function(issue, rows_affected, action, details_path = NA_character_) {
-  tibble::tibble(
-    issue = issue,
-    rows_affected = rows_affected,
-    prevalence = if (n_total > 0) round(rows_affected / n_total, 4) else NA_real_,
-    action = action,
-    details_path = details_path
-  )
-}
-
-# Clean negative numeric values, log issues, and capture diagnostics
-clean_negative_values <- function(data, cols, diagnostics_dir, issue_log) {
-  negative_details <- list()
-
-  for (col in cols) {
-    negative_rows <- which(!is.na(data[[col]]) & data[[col]] < 0)
-    n_bad <- length(negative_rows)
-    if (n_bad > 0) {
-      negative_details[[col]] <- tibble::tibble(
-        micro_hab_data_tbl_id = data$micro_hab_data_tbl_id[negative_rows],
-        variable = col,
-        value = data[[col]][negative_rows]
-      )
-    }
-    data[[col]] <- ifelse(data[[col]] < 0, NA, data[[col]])
-    if (n_bad > 0) {
-      issue_log <- dplyr::bind_rows(
-        issue_log,
-        log_issue(
-          paste0(col, "_negative"),
-          n_bad,
-          "Negative values set to NA",
-          details_path = file.path(diagnostics_dir, paste0("microhabitat_negative_", col, ".csv"))
-        )
-      )
-    }
-  }
-
-  if (isTRUE(verbose)) {
-    if (length(negative_details) > 0) {
-      negative_summary <- data.frame(
-        variable = names(negative_details),
-        rows = vapply(negative_details, nrow, integer(1)),
-        row.names = NULL
-      )
-      print_table("Negative value counts by variable:", negative_summary)
-    } else {
-      log_info("Negative value counts by variable: 0")
-    }
-  }
-
-  list(raw = data, issue_log = issue_log, negative_details = negative_details)
-}
-
-# Clean percent columns to the 0-100 range, log issues, and capture diagnostics
-clean_percent_ranges <- function(data, cols, diagnostics_dir, issue_log) {
-  percent_details <- list()
-
-  for (col in cols) {
-    out_of_range <- which(!is.na(data[[col]]) & (data[[col]] < 0 | data[[col]] > 100))
-    n_bad <- length(out_of_range)
-    if (n_bad > 0) {
-      percent_details[[col]] <- tibble::tibble(
-        micro_hab_data_tbl_id = data$micro_hab_data_tbl_id[out_of_range],
-        variable = col,
-        value = data[[col]][out_of_range]
-      )
-    }
-    data[[col]] <- ifelse(!is.na(data[[col]]) & (data[[col]] < 0 | data[[col]] > 100), NA, data[[col]])
-    if (n_bad > 0) {
-      issue_log <- dplyr::bind_rows(
-        issue_log,
-        log_issue(
-          paste0(col, "_out_of_range"),
-          n_bad,
-          "Percent values outside 0-100 set to NA",
-          details_path = file.path(diagnostics_dir, paste0("microhabitat_percent_out_of_range_", col, ".csv"))
-        )
-      )
-    }
-  }
-
-  if (isTRUE(verbose)) {
-    if (length(percent_details) > 0) {
-      percent_summary <- data.frame(
-        variable = names(percent_details),
-        rows = vapply(percent_details, nrow, integer(1)),
-        row.names = NULL
-      )
-      print_table("Percent out-of-range counts by variable:", percent_summary)
-    } else {
-      log_info("Percent out-of-range counts by variable: 0")
-    }
-  }
-
-  list(raw = data, issue_log = issue_log, percent_details = percent_details)
-}
 
 # Data import ------------------------------------------------------------------
 # Establish file paths
@@ -143,6 +35,9 @@ n_total <- nrow(raw)
 
 # Initialize an issue log
 issue_log <- tibble::tibble()
+
+
+## Date cleaning -----------------------------------------------------------
 
 # Profile raw date formats before parsing
 raw <- raw |>
@@ -182,31 +77,38 @@ issue_log <- dplyr::bind_rows(
     "date_parse_failed",
     sum(is.na(raw$date)),
     "Parsed with ymd/mdy/dmy; invalid entries coerced to NA",
+    n_total = n_total,
     details_path = file.path(diagnostics_dir, "microhabitat_date_parse_failures.csv")
   ),
   log_issue(
     "date_formats_profiled",
     n_total,
     "Raw date formats counted; see diagnostics",
+    n_total = n_total,
     details_path = file.path(diagnostics_dir, "microhabitat_date_format_counts.csv")
   )
 )
 
-# Identify numeric columns that should not have negative values
+## Negative and percent cleaning -------------------------------------------
+
+# Identify numeric columns that should not have negative values and clean percent columns to the 0-100 range
 negative_cols <- c("count", "fl_mm", "dist_to_bottom", "depth", "focal_velocity", "velocity")
-
-# Clean negative numeric values by setting to NA and capturing details
-negative_results <- clean_negative_values(raw, negative_cols, diagnostics_dir, issue_log)
-raw <- negative_results$raw
-issue_log <- negative_results$issue_log
-negative_details <- negative_results$negative_details
-
-# Clean percent columns to the 0-100 range
 percent_cols <- names(raw)[stringr::str_starts(names(raw), "percent_")]
-percent_results <- clean_percent_ranges(raw, percent_cols, diagnostics_dir, issue_log)
-raw <- percent_results$raw
-issue_log <- percent_results$issue_log
-percent_details <- percent_results$percent_details
+clean_checks <- run_clean_checks(raw, "microhabitat", negative_cols = negative_cols, percent_cols = percent_cols, verbose = T)
+issue_log <- issue_log |>
+  dplyr::bind_rows(clean_checks$issue_log)
+negative_details <- clean_checks$negative_details
+percent_details <- clean_checks$percent_details
+
+# Clean the negative values
+raw <- raw |>
+  dplyr::mutate(count = ifelse(count < 0, NA, count),
+         fl_mm = ifelse(fl_mm < 0, NA, fl_mm),
+         depth = ifelse(depth < 0, NA, depth),
+         velocity = ifelse(velocity < 0, NA, velocity))
+
+
+## Species names -----------------------------------------------------------
 
 # Specify a controlled vocabulary for species
 species_vocab <- c(
@@ -277,6 +179,7 @@ if (species_fixed > 0) {
       "species_standardized",
       species_fixed,
       "Standardized to controlled vocabulary",
+      n_total = n_total,
       details_path = file.path(diagnostics_dir, "microhabitat_species_standardized_details.csv")
     )
   )
@@ -288,11 +191,15 @@ issue_log <- dplyr::bind_rows(
     "species_missing_or_not_provided",
     species_missing_or_dropped,
     "Left as NA when missing or unrecognized (includes observations with no fish observed)",
+    n_total = n_total,
     details_path = file.path(diagnostics_dir, "microhabitat_species_missing_or_unrecognized.csv")
   )
 )
 
 raw <- raw |> dplyr::select(-species_original)
+
+
+## Geomorphic labels -------------------------------------------------------
 
 # Controlled vocab: channel geomorphic unit
 channel_vocab <- c("glide", "glide margin", "riffle", "riffle margin", "pool", "backwater")
@@ -348,6 +255,7 @@ if (channel_fixed > 0) {
       "channel_standardized",
       channel_fixed,
       "Standardized to controlled vocabulary",
+      n_total = n_total,
       details_path = file.path(diagnostics_dir, "microhabitat_channel_standardized_details.csv")
     )
   )
@@ -359,6 +267,7 @@ issue_log <- dplyr::bind_rows(
     "channel_missing_or_not_provided",
     channel_missing_or_dropped,
     "Left as NA when missing or unrecognized",
+    n_total = n_total,
     details_path = file.path(diagnostics_dir, "microhabitat_channel_missing_or_unrecognized.csv")
   )
 )
@@ -373,24 +282,6 @@ readr::write_csv(issue_log, issues_path)
 readr::write_csv(date_format_counts, file.path(diagnostics_dir, "microhabitat_date_format_counts.csv"))
 if (nrow(date_parse_failures) > 0) {
   readr::write_csv(date_parse_failures, file.path(diagnostics_dir, "microhabitat_date_parse_failures.csv"))
-}
-
-if (length(negative_details) > 0) {
-  for (nm in names(negative_details)) {
-    readr::write_csv(
-      negative_details[[nm]],
-      file.path(diagnostics_dir, paste0("microhabitat_negative_", nm, ".csv"))
-    )
-  }
-}
-
-if (length(percent_details) > 0) {
-  for (nm in names(percent_details)) {
-    readr::write_csv(
-      percent_details[[nm]],
-      file.path(diagnostics_dir, paste0("microhabitat_percent_out_of_range_", nm, ".csv"))
-    )
-  }
 }
 
 if (nrow(species_standardized_details) > 0) {

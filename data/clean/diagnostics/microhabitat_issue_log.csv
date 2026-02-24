@@ -1,0 +1,5 @@
+"issue","rows_affected","prevalence","action","details_path"
+"count_negative",1,1e-04,"Negative values set to NA","data/clean/diagnostics/microhabitat_negative_count.csv"
+"fl_mm_negative",1,1e-04,"Negative values set to NA","data/clean/diagnostics/microhabitat_negative_fl_mm.csv"
+"depth_negative",1,1e-04,"Negative values set to NA","data/clean/diagnostics/microhabitat_negative_depth.csv"
+"velocity_negative",1,1e-04,"Negative values set to NA","data/clean/diagnostics/microhabitat_negative_velocity.csv"
