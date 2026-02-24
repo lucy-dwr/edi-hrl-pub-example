@@ -9,7 +9,14 @@ These files are generated from raw inputs in [`data/raw/`](../raw/) by scripts i
 - [`clean/README.md`](../../clean/README.md)
 - [`clean/clean-microhabitat-observations.R`](../../clean/clean-microhabitat-observations.R)
 
-To regenerate the microhabitat example outputs in an R console:
+To regenerate the microhabitat example outputs in an R console (recommended for consistency with the ingest runner and `{targets}`):
+
+```r
+source("clean/clean.R")
+run_clean()
+```
+
+If you want to run the full example script directly:
 
 ```r
 source("clean/clean-microhabitat-observations.R")

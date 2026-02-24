@@ -2,15 +2,22 @@
 
 Transformations that turn raw (untouched) data in [`data/raw/`](../data/raw/) into cleaned data in [`data/clean/`](../data/clean/). Keep steps deterministic and well-documented. A `run_clean()` function is exposed in [`clean/clean.R`](clean.R) so the runner or `{targets}` pipeline can reuse it.
 
-To run the example cleaning script in an R console:
+To run cleaning in an R console (recommended for consistency with the ingest runner and `{targets}`):
 
 ```r
-source("clean/clean-microhabitat-observations.R")
+source("clean/clean.R")
+run_clean()
 ```
 
 ## Example Cleaning Script
 
 [`clean/clean-microhabitat-observations.R`](clean-microhabitat-observations.R) is a tutorial-style example cleaning workflow for the Feather River microhabitat dataset.
+
+If you want to step through the full example script directly:
+
+```r
+source("clean/clean-microhabitat-observations.R")
+```
 
 It demonstrates how to:
 
