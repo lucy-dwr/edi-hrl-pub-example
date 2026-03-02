@@ -2,6 +2,9 @@
 #
 # This script applies post-cleaning quality-control checks to the cleaned
 # microhabitat dataset and writes a QC issue summary plus diagnostics.
+#
+# Comments are included throughout to explain the rationale and implementation
+# of this code so as to serve as a tutorial.
 
 # ==============================================================================
 # Set up and run options ----
@@ -11,7 +14,20 @@
 library(hrlpub)
 
 # Set TRUE for more console output
-verbose <- FALSE
+if (!exists("verbose")) {
+  verbose <- FALSE
+}
+
+# Set defaults for QC check configuration (can be overridden by run_qc() runner)
+if (!exists("qc_max_count")) {
+  qc_max_count <- 1000
+}
+if (!exists("qc_check_interobs")) {
+  qc_check_interobs <- FALSE
+}
+if (!exists("qc_check_condition")) {
+  qc_check_condition <- FALSE
+}
 
 
 # ==============================================================================
@@ -19,7 +35,9 @@ verbose <- FALSE
 # ==============================================================================
 
 # Identify a path to the target cleaned data
-qc_clean_path <- "data/clean/microhabitat_observations_clean.csv"
+if (!exists("qc_clean_path")) {
+  qc_clean_path <- "data/clean/microhabitat_observations_clean.csv"
+}
 
 # Check that the target cleaned data file exists
 if (!file.exists(qc_clean_path)) {
@@ -48,7 +66,7 @@ if (verbose) {
 # ==============================================================================
 
 # Remap microhabitat observation ID to the site_id field expected by the
-# fish-observation QC helperå
+# fish-observation QC helper
 qc_data <- clean_data |>
   dplyr::mutate(site_id = as.character(micro_hab_data_tbl_id))
 
@@ -57,16 +75,16 @@ qc_data <- clean_data |>
 qc_results <- hrlpub::run_qc_checks(
   data = qc_data,
   data_type = "fish_observation",
-  max_count = 1000,
-  check_interobs = FALSE,
-  check_condition = FALSE
+  max_count = qc_max_count,
+  check_interobs = qc_check_interobs,
+  check_condition = qc_check_condition
 )
 
 if (verbose) {
   hrlpub::print_qc_summary(qc_results)
 }
 
-# Build and save an RDS QC report object for downstream review.
+# Build and save an RDS QC report object for downstream review
 qc_report <- hrlpub::generate_qc_report(
   qc_results = qc_results,
   output_file = qc_report_path
@@ -81,7 +99,7 @@ qc_report <- hrlpub::generate_qc_report(
 qc_flags <- qc_results$flags |>
   dplyr::select(row_id, date, site_id, species, flag, flag_reason)
 
-# Summarize reason frequencies for all non-pass QC flags.
+# Summarize reason frequencies for all non-pass QC flags
 qc_flag_reason_counts <- qc_flags |>
   dplyr::filter(flag != "PASS") |>
   dplyr::count(flag, flag_reason, name = "rows", sort = TRUE)
@@ -91,8 +109,8 @@ n_reject <- sum(qc_flags$flag == "REJECT", na.rm = TRUE)
 n_flagged <- n_suspect + n_reject
 
 # Log summary counts of suspected and rejected records
-hrlpub::log_info("QC suspect records: ", n_suspect)
-hrlpub::log_info("QC reject records: ", n_reject)
+hrlpub::log_info("QC suspect records: ", n_suspect, verbose = verbose)
+hrlpub::log_info("QC reject records: ", n_reject, verbose = verbose)
 
 # Establish an issue log
 qc_issue_log <- tibble::tibble()
@@ -139,10 +157,8 @@ if (n_flagged == 0) {
 # Write QC artifacts
 readr::write_csv(qc_issue_log, qc_issues_path)
 readr::write_csv(qc_flags, qc_flags_path)
-
-if (nrow(qc_flag_reason_counts) > 0) {
-  readr::write_csv(qc_flag_reason_counts, qc_flag_reason_counts_path)
-}
+# Write the flag-reason counts file even when empty so outputs are deterministic
+readr::write_csv(qc_flag_reason_counts, qc_flag_reason_counts_path)
 
 if (verbose && nrow(qc_flag_reason_counts) > 0) {
   hrlpub::print_table("QC flag reason counts:", qc_flag_reason_counts)
@@ -152,8 +168,5 @@ message("QC issue summary written to: ", qc_issues_path)
 message("QC flag details written to: ", qc_flags_path)
 message("QC report written to: ", qc_report_path)
 
-outputs <- c(qc_issues_path, qc_flags_path, qc_report_path)
-if (nrow(qc_flag_reason_counts) > 0) {
-  outputs <- c(outputs, qc_flag_reason_counts_path)
-}
+outputs <- c(qc_issues_path, qc_flags_path, qc_report_path, qc_flag_reason_counts_path)
 invisible(outputs)

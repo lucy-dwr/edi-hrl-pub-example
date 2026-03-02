@@ -1,5 +1,5 @@
 # Clean Feather River microhabitat data
-
+#
 # This script checks and cleans the following fields:
 #   - dates
 #   - negative values
@@ -44,6 +44,17 @@ if (!exists("diagnostics_dir")) {
   diagnostics_dir <- "data/clean/diagnostics"
 }
 dir.create(diagnostics_dir, showWarnings = FALSE, recursive = TRUE)
+
+# Remove prior clean-stage diagnostics so reruns do not carry stale files.
+# Keep QC artifacts untouched by targeting only clean-owned filename prefixes.
+prior_clean_diagnostics <- list.files(
+  diagnostics_dir,
+  pattern = "^microhabitat_(date|negative|species|channel|issue_log)",
+  full.names = TRUE
+)
+if (length(prior_clean_diagnostics) > 0) {
+  file.remove(prior_clean_diagnostics)
+}
 
 # Read raw data and keep dates as character to profile formats first
 raw <- readr::read_csv(

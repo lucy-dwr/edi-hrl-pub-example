@@ -17,9 +17,8 @@ setup <- function(use_renv = TRUE) {
     install.packages("cder")
   }
 
-  # TODO: update this install
   if (!requireNamespace("hrlpub", quietly = TRUE)) {
-    remotes::install_github("TODO_ORG/hrlpub")
+    remotes::install_github("FlowWest/hrlpub")
   }
 
   invisible(TRUE)

@@ -5,7 +5,7 @@
 #   2) a scripted CDEC API download written to data/raw/
 #
 # It returns only file paths that are real ingest outputs so targets can track
-# them with format = "file"
+# them with format = "file".
 run_ingest <- function(
   manual_raw_path = "data/raw/microhabitat_observations_raw.csv",
   require_manual_raw = TRUE,
@@ -38,7 +38,7 @@ run_ingest <- function(
   # Collect the files produced/validated by ingest to return to callers
   outputs <- character()
 
-  # Validate the manual raw file expected by downstream cleaning; instrict mode
+  # Validate the manual raw file expected by downstream cleaning; in strict mode
   # (require_manual_raw = TRUE), fail fast if missing so the pipeline does not
   # proceed with incomplete raw inputs
   if (file.exists(manual_raw_path)) {

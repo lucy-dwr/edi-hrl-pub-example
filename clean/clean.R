@@ -1,10 +1,10 @@
 # Clean runner for the demo workflow
 #
 # This runner executes the tutorial cleaning script and returns only clean-stage
-# outputs so targets can track them with format = "file"
+# outputs so targets can track them with format = "file".
 #
 # It expects the primary raw microhabitat CSV from ingest (or manual placement)
-# and can accept raw_outputs from an upstream runner for dependency checks
+# and can accept raw_outputs from an upstream runner for dependency checks.
 run_clean <- function(
   raw_outputs = NULL,
   raw_input_path = "data/raw/microhabitat_observations_raw.csv",
