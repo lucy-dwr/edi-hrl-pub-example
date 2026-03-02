@@ -6,7 +6,7 @@ Export and publication steps that package `data/clean/` outputs for publication 
 
 1. Fill in the metadata templates in [`publish/metadata_templates/`](metadata_templates/):
    - [`abstract.txt`](metadata_templates/abstract.txt)
-   - [`attributes_microhabitat.csv`](metadata_templates/attributes_microhabitat.csv)
+   - [`attributes_microhabitat_observations.csv`](metadata_templates/attributes_csv_template/attributes_microhabitat_observations.csv)
    - [`keywords.txt`](metadata_templates/keywords.txt)
    - [`personnel.txt`](metadata_templates/personnel.txt)
    - [`methods.docx`](metadata_templates/methods.docx)
@@ -14,12 +14,13 @@ Export and publication steps that package `data/clean/` outputs for publication 
    - [`custom_units.txt`](metadata_templates/custom_units.txt) (if needed)
    - [`intellectual_rights.txt`](metadata_templates/intellectual_rights.txt)
 
-2. Update the TODO fields in [`publish/make-eml.R`](make-eml.R) and set
-   `run_eml <- TRUE` when you are ready to generate an EML file.
+2. Reserve an EDI package number at <https://portal.edirepository.org/>
+   (log in → Tools → Reserve a Package ID) and fill in `edi_number` in
+   [`publish/make-eml.R`](make-eml.R).
 
 3. Run the script in an R console:
 
-```
+```r
 source("scripts/setup.R")
 source("publish/make-eml.R")
 ```
