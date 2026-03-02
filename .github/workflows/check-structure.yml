@@ -1,4 +1,11 @@
-name: Check Required Files and Folders
+name: Check Repository Structure
+
+# This workflow checks that all required folders and files are present.
+# It runs as a plain shell script with no R installation required, so it
+# is fast and works for both the script-first and {targets} approaches.
+#
+# To adapt this for your own repository: update the REQUIRED_FOLDERS and
+# REQUIRED_FILES lists below to match your dataset and folder layout.
 
 on:
   push:
@@ -20,28 +27,58 @@ jobs:
         run: |
           echo "Checking for required folders and files..."
 
-          # Define required folders
+          # -----------------------------------------------------------------------
+          # Required folders — update to match your repository structure
+          # -----------------------------------------------------------------------
           REQUIRED_FOLDERS=(
-            "data-raw/data_objects"
-            "data-raw/eml"
-            "data-raw/metadata_templates"
-            "data-raw/metadata_templates/attributes_csv_template"
-            "data-raw/metadata_templates/personnel_csv_template"
+            "data/raw"
+            "data/clean"
+            "ingest"
+            "clean"
+            "qc"
+            "publish"
+            "publish/metadata_templates"
+            "publish/metadata_templates/attributes_csv_template"
+            "publish/metadata_templates/personnel_csv_template"
+            "publish/eml"
+            "scripts"
           )
 
-          # Define required files
+          # -----------------------------------------------------------------------
+          # Required files — update to match your dataset and metadata templates
+          # -----------------------------------------------------------------------
           REQUIRED_FILES=(
-            "data-raw/metadata_templates/abstract.txt"
-            "data-raw/metadata_templates/intellectual_rights.txt"
-            "data-raw/metadata_templates/keywords.txt"
-            "data-raw/metadata_templates/methods.docx"
-            "data-raw/metadata_templates/taxonomic_coverage.txt"
+            # Pipeline runner scripts (shared by both script-first and targets approaches)
+            "ingest/ingest.R"
+            "clean/clean.R"
+            "qc/qc.R"
+            "publish/publish.R"
+            "scripts/run_pipeline.R"
+            "_targets.R"
+
+            # Tutorial example scripts
+            "ingest/read-data-cdec.R"
+            "clean/clean-microhabitat-observations.R"
+            "qc/qc-microhabitat-observations.R"
+            "publish/make-eml.R"
+
+            # Raw data (manually maintained; not regenerable from code)
+            "data/raw/microhabitat_observations_raw.csv"
+
+            # Metadata templates
+            "publish/metadata_templates/abstract.txt"
+            "publish/metadata_templates/keywords.txt"
+            "publish/metadata_templates/methods.docx"
+            "publish/metadata_templates/intellectual_rights.txt"
+            "publish/metadata_templates/geographic_coverage.txt"
+            "publish/metadata_templates/taxonomic_coverage.txt"
+            "publish/metadata_templates/custom_units.txt"
+            "publish/metadata_templates/attributes_csv_template/attributes_microhabitat_observations.csv"
+            "publish/metadata_templates/personnel_csv_template/personnel.csv"
           )
 
-          # Initialize error flag
           ERRORS=0
 
-          # Check folders
           echo ""
           echo "=== Checking Folders ==="
           for folder in "${REQUIRED_FOLDERS[@]}"; do
@@ -53,7 +90,6 @@ jobs:
             fi
           done
 
-          # Check files
           echo ""
           echo "=== Checking Files ==="
           for file in "${REQUIRED_FILES[@]}"; do
@@ -65,7 +101,6 @@ jobs:
             fi
           done
 
-          # Report results
           echo ""
           if [ $ERRORS -eq 0 ]; then
             echo "✓ All required folders and files are present!"

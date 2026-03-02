@@ -1,0 +1,53 @@
+name: Test Pipeline (Script Runner)
+
+# This workflow verifies that the clean and QC pipeline stages run without
+# error using the simple script-first approach (scripts/run_pipeline.R).
+#
+# Ingest is skipped because it requires external API access. Publish is
+# skipped because it requires EDI credentials. Both stages use committed
+# data in data/raw/ and data/clean/ to run entirely offline.
+#
+# To adapt this for your own repository:
+#   - Update the package installation step to include any packages your
+#     pipeline requires beyond the ones listed here.
+#   - If your hrlpub fork is private, add a GITHUB_PAT repository secret
+#     and pass it to remotes::install_github().
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-pipeline-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install R packages
+        run: |
+          install.packages(c(
+            'remotes', 'testthat', 'here',
+            'readr', 'dplyr', 'lubridate', 'stringr', 'tibble'
+          ))
+          remotes::install_github('FlowWest/hrlpub')
+        shell: Rscript {0}
+
+      - name: Run clean and QC stages
+        run: |
+          Rscript scripts/run_pipeline.R --skip-ingest --skip-publish
+
+      - name: Run data quality tests
+        run: |
+          testthat::test_dir("tests/testthat")
+        shell: Rscript {0}
