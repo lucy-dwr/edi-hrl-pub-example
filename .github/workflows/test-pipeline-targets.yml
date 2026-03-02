@@ -12,8 +12,9 @@ name: Test Pipeline (Targets)
 # To adapt this for your own repository:
 #   - Update the package installation step to include any packages your
 #     pipeline requires beyond the ones listed here.
-#   - If your hrlpub fork is private, add a GITHUB_PAT repository secret
-#     and pass it to remotes::install_github().
+#   - The GITHUB_TOKEN is passed to remotes::install_github() to avoid GitHub
+#     API rate limits. If your hrlpub fork is private, replace GITHUB_TOKEN
+#     with a personal access token stored as a GITHUB_PAT repository secret.
 
 on:
   push:
@@ -37,6 +38,8 @@ jobs:
           r-version: 'release'
 
       - name: Install R packages
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
           install.packages(c(
             'remotes', 'targets', 'testthat', 'here',
