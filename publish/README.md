@@ -8,7 +8,7 @@ Export and publication steps that package `data/clean/` outputs for publication 
    - [`abstract.txt`](metadata_templates/abstract.txt)
    - [`attributes_microhabitat_observations.csv`](metadata_templates/attributes_csv_template/attributes_microhabitat_observations.csv)
    - [`keywords.txt`](metadata_templates/keywords.txt)
-   - [`personnel.txt`](metadata_templates/personnel.txt)
+   - [`personnel_csv_template/personnel.csv`](metadata_templates/personnel_csv_template/personnel.csv)
    - [`methods.docx`](metadata_templates/methods.docx)
    - [`taxonomic_coverage.txt`](metadata_templates/taxonomic_coverage.txt) (if needed)
    - [`custom_units.txt`](metadata_templates/custom_units.txt) (if needed)
