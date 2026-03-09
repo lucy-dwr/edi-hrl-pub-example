@@ -1,6 +1,6 @@
 # data/clean
 
-This folder stores data that are created by cleaning and quality control steps and that are ready for publication. Regenerate these data using scripts in `clean/` that process raw data in `data/raw/` or by running the `{targets}` pipeline, rather than editing data files by hand.
+This folder stores data that are created by cleaning and quality control steps and that are ready for publication. Regenerate these data using scripts in [`clean/`](../../clean/) that process raw data in [`data/raw/`](../raw/) or by running the `{targets}` pipeline, rather than editing data files by hand.
 
 ## Related Cleaning Workflow
 
