@@ -4,8 +4,8 @@ name: Check Repository Structure
 # It runs as a plain shell script with no R installation required, so it
 # is fast and works for both the script-first and {targets} approaches.
 #
-# To adapt this for your own repository: update the REQUIRED_FOLDERS and
-# REQUIRED_FILES lists below to match your dataset and folder layout.
+# To adapt this for your own repository: update the REQUIRED_FILES lists below
+# to match your dataset layout.
 
 on:
   push:
