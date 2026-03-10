@@ -31,13 +31,13 @@ data_file_names <- "microhabitat_observations_clean.csv"
 
 # Attribute definition file(s) for each data table above. Filenames only;
 # make_eml_edi() reads from publish/metadata/attributes/
-attributes_file_names <- "attributes_microhabitat_observations.csv"
+attributes_file_names <- "attributes_microhabitat_observations_clean.csv"
 
 # ==============================================================================
 # Metadata ----
 # ==============================================================================
 
-title <- "Feather River Microhabitat Observations"
+title <- "Feather River Microhabitat Observations 2001-2002"
 maintenance <- "annually"
 
 # EDI package number. The placeholder below ("edi.000.1") is safe to use for
