@@ -10,7 +10,7 @@
 # publish = TRUE.
 run_publish <- function(clean_outputs = NULL,
                         qc_outputs = NULL,
-                        generate_eml = FALSE,
+                        generate_eml = TRUE,
                         publish = FALSE) {
   if (!isTRUE(generate_eml) && !isTRUE(publish)) {
     message("Publish step skipped (generate_eml = FALSE, publish = FALSE).")
