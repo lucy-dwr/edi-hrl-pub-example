@@ -65,22 +65,7 @@
       </temporalCoverage>
       <taxonomicCoverage>
         <taxonomicClassification>
-          <taxonRankValue>chinook salmon common  Oncorhynchus tshawytscha ITIS  161980</taxonRankValue>
-        </taxonomicClassification>
-        <taxonomicClassification>
-          <taxonRankValue>steelhead trout (wild) common  Oncorhynchus mykiss ITIS  161989</taxonRankValue>
-        </taxonomicClassification>
-        <taxonomicClassification>
-          <taxonRankValue>steelhead trout (clipped) common  Oncorhynchus mykiss ITIS  161989</taxonRankValue>
-        </taxonomicClassification>
-        <taxonomicClassification>
-          <taxonRankValue>speckled dace common  Rhinichthys osculus ITIS  163387</taxonRankValue>
-        </taxonomicClassification>
-        <taxonomicClassification>
-          <taxonRankValue>sacramento pikeminnow common  Ptychocheilus grandis ITIS  163524</taxonRankValue>
-        </taxonomicClassification>
-        <taxonomicClassification>
-          <taxonRankValue>tule perch  common  Hysterocarpus traskii  ITIS  553322</taxonRankValue>
+          <taxonRankValue>Chinook common  Chinook ITIS  161980</taxonRankValue>
         </taxonomicClassification>
       </taxonomicCoverage>
     </coverage>
@@ -165,15 +150,6 @@
   <additionalMetadata>
     <metadata>
       <unitList>
-        <unit id="number of divers" multiplierToSI="" name="number of divers" parentSI="" unitType="dimensionless">
-          <description>number of divers</description>
-        </unit>
-        <unit id="river mile" multiplierToSI="" name="river mile" parentSI="" unitType="dimensionless">
-          <description>river mile</description>
-        </unit>
-        <unit id="decimal degrees" multiplierToSI="" name="decimal degrees" parentSI="" unitType="dimensionless">
-          <description>decimal degrees</description>
-        </unit>
         <unit id="count of fish" multiplierToSI="" name="count of fish" parentSI="" unitType="dimensionless">
           <description>count of fish</description>
         </unit>
