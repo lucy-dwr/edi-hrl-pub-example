@@ -69,7 +69,6 @@ Or in continuous integration via `Rscript -e "targets::tar_make()"` in a GitHub 
 - **[`qc/`](qc/):** quality control scripts and reports to validate cleaned data
 - **[`publish/`](publish/):** scripts to generate metadata and publish cleaned data and metadata to EDI
 - **[`scripts/`](scripts/):** scripts that run ingest → clean → qc → publish
-- **[`tests/`](tests/):** automated tests to ensure code quality and correctness as needed
 
 ## Example
 
