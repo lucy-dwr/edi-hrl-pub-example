@@ -3946,7 +3946,7 @@
       "RemoteUsername": "EDIorg",
       "RemoteRepo": "taxonomyCleanr",
       "RemoteRef": "main",
-      "RemoteSha": "16e584ab4d6b2a2084d0c3bd7198774f08821782"
+      "RemoteSha": "16e584ab4d6b2a2084d0c3bd7198774f08821782",
       "NeedsCompilation": "no",
       "Author": "Colin Smith [aut, cre] (ORCID: <https://orcid.org/0000-0003-2261-9931>), An T. Nguyen [ctb]",
       "Maintainer": "Colin Smith <csmith.tar@gmail.com>"
