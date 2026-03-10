@@ -4,15 +4,15 @@ Export and publication steps that package `data/clean/` outputs for publication 
 
 ## Metadata workflow (microhabitat observations demo)
 
-1. Fill in the metadata templates in [`publish/metadata_templates/`](metadata_templates/):
-   - [`abstract.txt`](metadata_templates/abstract.txt)
-   - [`attributes_microhabitat_observations.csv`](metadata_templates/attributes_csv_template/attributes_microhabitat_observations.csv)
-   - [`keywords.txt`](metadata_templates/keywords.txt)
-   - [`personnel_csv_template/personnel.csv`](metadata_templates/personnel_csv_template/personnel.csv)
-   - [`methods.docx`](metadata_templates/methods.docx)
-   - [`taxonomic_coverage.txt`](metadata_templates/taxonomic_coverage.txt) (if needed)
-   - [`custom_units.txt`](metadata_templates/custom_units.txt) (if needed)
-   - [`intellectual_rights.txt`](metadata_templates/intellectual_rights.txt)
+1. Fill in the metadata templates in [`publish/metadata/`](metadata/):
+   - [`abstract.txt`](metadata/abstract.txt)
+   - [`attributes_microhabitat_observations.csv`](metadata/attributes/attributes_microhabitat_observations.csv)
+   - [`keywords.txt`](metadata/keywords.txt)
+   - [`personnel/personnel.csv`](metadata/personnel/personnel.csv)
+   - [`methods.docx`](metadata/methods.docx)
+   - [`taxonomic_coverage.txt`](metadata/taxonomic_coverage.txt) (if needed)
+   - [`custom_units.txt`](metadata/custom_units.txt) (if needed)
+   - [`intellectual_rights.txt`](metadata/intellectual_rights.txt)
 
 2. Reserve an EDI package number at <https://portal.edirepository.org/>
    (log in → Tools → Reserve a Package ID) and fill in `edi_number` in
