@@ -1,4 +1,4 @@
-# metadata_templates
+# metadata
 
 These files provide the metadata that `hrlpub::make_eml_edi()` reads to produce
 an EML (Ecological Metadata Language) document for EDI publication. EML is an

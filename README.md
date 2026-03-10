@@ -29,8 +29,8 @@ Each script can be sourced directly and includes comments explaining each step. 
 
 Each stage has two scripts with different purposes:
 
-- **Tutorial scripts** (e.g., `clean/clean-microhabitat-observations.R`) are designed to be read and run interactively, step by step. They include detailed comments explaining each decision. Start here when learning the workflow.
-- **Runner functions** (e.g., `clean/clean.R`) each expose a `run_<stage>()` function (`run_ingest()`, `run_clean()`, `run_qc()`, `run_publish()`) used by the pipeline orchestration options below. They call the tutorial script internally, so the logic lives in one place.
+- **Tutorial scripts** (e.g., [`clean/clean-microhabitat-observations.R`](clean/clean-microhabitat-observations.R)) are designed to be read and run interactively, step by step. They include detailed comments explaining each decision. Start here when learning the workflow.
+- **Runner functions** (e.g., [`clean/clean.R`](clean/clean.R)) each expose a `run_<stage>()` function (`run_ingest()`, `run_clean()`, `run_qc()`, `run_publish()`) used by the pipeline orchestration options below. They call the tutorial script internally, so the logic lives in one place.
 
 See the folder READMEs for more detail on each stage.
 
@@ -55,29 +55,22 @@ The workflow in this repository can be run in three ways. Sourcing **individual 
 targets::tar_make()
 ```
 
-Or in continuous integration via `Rscript -e "targets::tar_make()"` in a GitHub Actions workflow (e.g., `.github/workflows/test-pipeline-targets.yml`).
+Or in continuous integration via `Rscript -e "targets::tar_make()"` in a GitHub Actions workflow (e.g., [`.github/workflows/test-pipeline-targets.yml`](.github/workflows/test-pipeline-targets.yml)).
 
-**When to use `{targets}` vs. `scripts/run_pipeline.R`:** For learning the workflow step by step, the script-first approach is simpler. `{targets}` is more useful once you are iterating on a real dataset and want automatic caching and re-run detection.
+**When to use `{targets}` vs. [`scripts/run_pipeline.R`](scripts/run_pipeline.R):** For learning the workflow step by step, the script-first approach is simpler. `{targets}` is more useful once you are iterating on a real dataset and want automatic caching and re-run detection.
 
 ## Repository structure
 
-- **`data/`:** data objects
-    - **`raw/`:** raw (untreated) data
-    - **`clean/`:** cleaned data
-- **`ingest/`:** scripts that pull data into `data/raw/` if an API or scripted download is used
-- **`clean/`:** scripts that clean raw data to produce clean datasets
-- **`qc/`:** quality control scripts and reports to validate cleaned data
-- **`publish/`:** scripts to generate metadata and publish cleaned data and metadata to EDI
-- **`scripts/`:** scripts that run ingest → clean → qc → publish
-- **`tests/`:** automated tests to ensure code quality and correctness as needed
+- **[`data/`](data/):** data objects
+    - **[`raw/`](data/raw/):** raw (untreated) data
+    - **[`clean/`](data/clean/):** cleaned data
+- **[`ingest/`](ingest/):** scripts that pull data into `data/raw/` if an API or scripted download is used
+- **[`clean/`](clean/):** scripts that clean raw data to produce clean datasets
+- **[`qc/`](qc/):** quality control scripts and reports to validate cleaned data
+- **[`publish/`](publish/):** scripts to generate metadata and publish cleaned data and metadata to EDI
+- **[`scripts/`](scripts/):** scripts that run ingest → clean → qc → publish
+- **[`tests/`](tests/):** automated tests to ensure code quality and correctness as needed
 
 ## Example
 
 This repository contains an example workflow for a dataset of fish microhabitat observations. A partial workflow for CDEC precipitation data is also included to illustrate how to handle an API call in data ingestion.
-
-## Open items
-
-- [`publish/metadata/taxonomic_coverage.txt`](publish/metadata/taxonomic_coverage.txt): needs to be corrected and expanded to cover all species in the dataset.
-- [`publish/metadata/custom_units.txt`](publish/metadata/custom_units.txt): contains units carried over from other datasets that need to be removed.
-- Rename "template" directories: `publish/metadata/` and `publish/metadata/attributes/` are named as if they contain blank templates, but in this repo they hold filled-in example metadata. Better names would be something like `publish/metadata/` and `publish/metadata/attributes/`. This rename requires a corresponding change to the path constants in `hrlpub::make_eml_edi()`, so it should be coordinated with an update to the `hrlpub` package.
-- Testing infrastructure: this repository does not include automated data quality tests. For a production dataset workflow, consider adding `{testthat}` tests (or similar) to assert pipeline invariants — for example, that required columns are present and non-empty, that cleaned data contains no negative values in physical measurement columns, that observation attributes fall within anticipated ranges, and that date columns parse correctly. These checks are distinct from the QC stage, which flags records for scientific review; unit tests would catch regressions introduced by changes to cleaning or QC scripts.
