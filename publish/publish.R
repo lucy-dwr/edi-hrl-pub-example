@@ -29,11 +29,18 @@ run_publish <- function(clean_outputs = NULL,
   }
 
   if (isTRUE(publish)) {
-    pub_script <- "publish-data.R"
-    if (!file.exists(pub_script)) {
-      stop("Missing publish script: ", pub_script, call. = FALSE)
-    }
+    # Must match the EDI number used in publish/make-eml.R.
+    edi_number <- "edi.000.1"
+
+    # Publish to staging first to review the formatted data package, then
+    # switch publish_environment to "production" for the final release.
+    # Use publish_type = "update" (and increment edi_number) for revisions
+    # to an already-published package.
     message("Publishing to EDI...")
-    source(pub_script, local = new.env(parent = globalenv()))
+    hrlpub::publish_data_edi(
+      publish_type        = "new",
+      edi_number          = edi_number,
+      publish_environment = "staging"
+    )
   }
 }

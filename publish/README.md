@@ -1,6 +1,6 @@
 # publish
 
-Export and publication steps that package `data/clean/` outputs for publication to EDI. Use this folder for scripts and stash rendered outputs or links to hosted artifacts. Expose a `run_publish()` function (e.g., in `publish/publish.R`) so both the runner and optional {targets} pipeline can call it; you can delegate to `publish-data.R` from there.
+Export and publication steps that package `data/clean/` outputs for publication to EDI. Use this folder for scripts and stash rendered outputs or links to hosted artifacts. Expose a `run_publish()` function (e.g., in `publish/publish.R`) so both the runner and optional {targets} pipeline can call it.
 
 ## Metadata workflow (microhabitat observations demo)
 
@@ -29,5 +29,6 @@ This writes the EML file to [`publish/eml/`](eml/).
 
 ## Publication (illustration only)
 
-[`publish-data.R`](../publish-data.R) shows how to publish to EDI. In this demo,
-do not run the publish step; it is included for reference only.
+[`publish/publish.R`](publish.R) shows how to publish to EDI via the `run_publish()`
+function. In this demo, publication is disabled (`publish = FALSE`) and is included
+for reference only.
