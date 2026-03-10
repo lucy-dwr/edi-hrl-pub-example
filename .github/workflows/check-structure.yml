@@ -4,8 +4,8 @@ name: Check Repository Structure
 # It runs as a plain shell script with no R installation required, so it
 # is fast and works for both the script-first and {targets} approaches.
 #
-# To adapt this for your own repository: update the REQUIRED_FOLDERS and
-# REQUIRED_FILES lists below to match your dataset and folder layout.
+# To adapt this for your own repository: update the REQUIRED_FILES lists below
+# to match your dataset layout.
 
 on:
   push:
@@ -16,7 +16,12 @@ on:
       - main
 
 jobs:
-  check-structure:
+  # Reusable workflow from the template repository
+  check-structure-standard:
+    uses: FlowWest/hrl-edi-template/.github/workflows/check-required-structure.yml@main
+
+  # Check for files unique to this repository - update to match your repository
+  check-structure-repo:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,28 +30,13 @@ jobs:
 
       - name: Check required folders and files
         run: |
-          echo "Checking for required folders and files..."
-
-          # -----------------------------------------------------------------------
-          # Required folders — update to match your repository structure
-          # -----------------------------------------------------------------------
-          REQUIRED_FOLDERS=(
-            "data/raw"
-            "data/clean"
-            "ingest"
-            "clean"
-            "qc"
-            "publish"
-            "publish/metadata_templates"
-            "publish/metadata_templates/attributes_csv_template"
-            "publish/metadata_templates/personnel_csv_template"
-            "publish/eml"
-            "scripts"
-          )
+          echo "Checking for required files..."
 
           # -----------------------------------------------------------------------
           # Required files — update to match your dataset and metadata templates
           # -----------------------------------------------------------------------
+          # Metadata are already checked in the standard workflow
+
           REQUIRED_FILES=(
             # Pipeline runner scripts (shared by both script-first and targets approaches)
             "ingest/ingest.R"
@@ -64,31 +54,9 @@ jobs:
 
             # Raw data (manually maintained; not regenerable from code)
             "data/raw/microhabitat_observations_raw.csv"
-
-            # Metadata templates
-            "publish/metadata_templates/abstract.txt"
-            "publish/metadata_templates/keywords.txt"
-            "publish/metadata_templates/methods.docx"
-            "publish/metadata_templates/intellectual_rights.txt"
-            "publish/metadata_templates/geographic_coverage.txt"
-            "publish/metadata_templates/taxonomic_coverage.txt"
-            "publish/metadata_templates/custom_units.txt"
-            "publish/metadata_templates/attributes_csv_template/attributes_microhabitat_observations.csv"
-            "publish/metadata_templates/personnel_csv_template/personnel.csv"
           )
 
           ERRORS=0
-
-          echo ""
-          echo "=== Checking Folders ==="
-          for folder in "${REQUIRED_FOLDERS[@]}"; do
-            if [ -d "$folder" ]; then
-              echo "✓ Found: $folder"
-            else
-              echo "✗ Missing: $folder"
-              ERRORS=$((ERRORS + 1))
-            fi
-          done
 
           echo ""
           echo "=== Checking Files ==="
@@ -103,9 +71,9 @@ jobs:
 
           echo ""
           if [ $ERRORS -eq 0 ]; then
-            echo "✓ All required folders and files are present!"
+            echo "✓ All required files are present!"
             exit 0
           else
-            echo "✗ $ERRORS required folder(s) or file(s) are missing!"
+            echo "✗ $ERRORS required file(s) are missing!"
             exit 1
           fi

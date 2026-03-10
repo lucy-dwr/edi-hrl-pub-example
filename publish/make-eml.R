@@ -3,8 +3,8 @@
 # This script uses hrlpub::make_eml_edi(), which wraps EMLassemblyline to
 # produce an EML XML file. It reads:
 #   - data tables from data/clean/
-#   - metadata templates from publish/metadata_templates/
-#   - attribute definitions from publish/metadata_templates/attributes_csv_template/
+#   - metadata from publish/metadata/
+#   - attribute definitions from publish/metadata/attributes/
 # and writes the EML file to publish/eml/{edi_number}.xml.
 #
 # NOTE: This script only generates the EML metadata file locally. It does NOT
@@ -12,7 +12,7 @@
 # the metadata looks correct before publishing.
 #
 # Prerequisites before running:
-#   1. Complete all metadata templates in publish/metadata_templates/
+#   1. Complete all metadata templates in publish/metadata/
 #      (see publish/README.md for the full list)
 #   2. Replace the edi_number placeholder below with a real reserved package
 #      number before submitting. Reserve one at https://portal.edirepository.org/
@@ -30,7 +30,7 @@ library(hrlpub)
 data_file_names <- "microhabitat_observations_clean.csv"
 
 # Attribute definition file(s) for each data table above. Filenames only;
-# make_eml_edi() reads from publish/metadata_templates/attributes_csv_template/
+# make_eml_edi() reads from publish/metadata/attributes/
 attributes_file_names <- "attributes_microhabitat_observations.csv"
 
 # ==============================================================================
