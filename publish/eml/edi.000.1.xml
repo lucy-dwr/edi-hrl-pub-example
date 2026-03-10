@@ -2,7 +2,7 @@
 <eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.000.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
-      <principal>uid=srjpe,o=EDI,dc=edirepository,dc=org</principal>
+      <principal>uid=,o=EDI,dc=edirepository,dc=org</principal>
       <permission>all</permission>
     </allow>
     <allow>
@@ -20,7 +20,7 @@
       <organizationName>California Department of Water Resources</organizationName>
       <electronicMailAddress>Ryon.Kurth@water.ca.gov</electronicMailAddress>
     </creator>
-    <pubDate>2026-03-09</pubDate>
+    <pubDate>2026-03-10</pubDate>
     <abstract>
       <para>Understanding how fish presence is related to habitat features is useful in restoration planning and monitoring as better information about how fish use habitat may lead to more impactful restoration projects. The California Department of Water Resources (DWR), conducted a two-year study of microhabitat and mesohabitat in Feather River. The goal of this study was to identify relationships between habitat conditions (depth, substrate, velocity, and cover) and where juvenile Chinook salmon and steelhead occur. Snorkel surveys were conducted monthly March through August in 2001 and 2002 across 29 different sites, which were selected at random (13 in Low Flow Channel, and 16 in High Flow Channel). Each sampling section covered an area 25 meters long by 4 meters wide, running parallel to riverbank. These data were published to support the Healthy Rivers and Landscapes Science Program.</para>
     </abstract>
@@ -65,7 +65,22 @@
       </temporalCoverage>
       <taxonomicCoverage>
         <taxonomicClassification>
-          <taxonRankValue>Chinook common  Chinook ITIS  161980</taxonRankValue>
+          <taxonRankValue>chinook salmon common  Oncorhynchus tshawytscha ITIS  161980</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicClassification>
+          <taxonRankValue>steelhead trout (wild) common  Oncorhynchus mykiss ITIS  161989</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicClassification>
+          <taxonRankValue>steelhead trout (clipped) common  Oncorhynchus mykiss ITIS  161989</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicClassification>
+          <taxonRankValue>speckled dace common  Rhinichthys osculus ITIS  163387</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicClassification>
+          <taxonRankValue>sacramento pikeminnow common  Ptychocheilus grandis ITIS  163524</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicClassification>
+          <taxonRankValue>tule perch  common  Hysterocarpus traskii  ITIS  553322</taxonRankValue>
         </taxonomicClassification>
       </taxonomicCoverage>
     </coverage>
